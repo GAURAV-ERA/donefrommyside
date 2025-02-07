@@ -25,9 +25,24 @@ def home():
 def forms():
     return render_template('forms.html') # Updated form
 
-@app.route('/submit_data', methods=['POST'])
+@app.route('/submit_data', methods=['GET','POST'])
 def submit_data():
+    
     try:
+        if request.method == 'GET':
+            age = request.args.get('age', type=float)
+            sex = request.args.get('sex')
+            bmi = request.args.get('bmi', type=float)
+            children = request.args.get('children', type=int)
+            smoker = request.args.get('smoker')
+            region = request.args.get('region')
+
+        # Handling POST request (form-data or JSON)
+        elif request.method == 'POST':
+            if request.content_type == 'application/json':
+                data = request.get_json()
+            else:  # Handling x-www-form-urlencoded
+                data = request.form.to_dict()
         # Form se data lena
         age = float(request.form['age'])
         sex = request.form['sex']
